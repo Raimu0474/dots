@@ -218,7 +218,3 @@ ress() {
 
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
-
-eval $(docker-machine env anenavi)
-
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
