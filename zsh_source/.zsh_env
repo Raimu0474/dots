@@ -1,3 +1,4 @@
+### env
 export DOTS_HOME="dots"
 export VENDOR_HOME="$DOTS_HOME/vendor"
 export ZPLUG_HOME="$VENDOR_HOME/.zplug"
