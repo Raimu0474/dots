@@ -1,7 +1,8 @@
-source zsh_source/.zsh_env
-source zsh_source/.zsh_zplug
-source zsh_source/.zsh_func
-source zsh_source/.zsh_alias
+source dots/zsh_source/.zsh_env
+source dots/zsh_source/.zsh_zplug
+source dots/zsh_source/.zsh_func
+source dots/zsh_source/.zsh_alias
+source dots/zsh_source/.zsh_prompt
 
 ### emacs 風キーバインド
 bindkey -e
