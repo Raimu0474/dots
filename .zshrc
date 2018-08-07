@@ -132,12 +132,6 @@ bindkey '^F' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
 
-alias 'anenavi_env'='eval $(docker-machine env anenavi)' 
-
-#if (which zprof > /dev/null) ;then
-#  zprof | less
-#fi
-
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
 
