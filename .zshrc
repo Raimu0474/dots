@@ -1,19 +1,7 @@
-### zplug
-source ~/.zplug/init.zsh
-zplug 'zsh-users/zsh-completions'
-zplug 'zsh-users/zaw'
-zplug 'zsh-users/zsh-syntax-highlighting', defer:2
-zplug check || zplug install
-
-### cdr の設定 (zplug load 前に書かないと zaw-cdr がスキップされる)
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook is-at-least
-if is-at-least 4.3.10; then
-add-zsh-hook chpwd chpwd_recent_dirs
-zstyle ':chpwd:*' recent-dirs-max 5000
-zstyle ':chpwd:*' recent-dirs-default yes
-fi
-
-zplug load
+source zsh_source/.zsh_env
+source zsh_source/.zsh_zplug
+source zsh_source/.zsh_func
+source zsh_source/.zsh_alias
 
 ### emacs 風キーバインド
 bindkey -e
@@ -28,19 +16,8 @@ zstyle ':vcs_info:*' enable git svn hg
 zstyle ':vcs_info:*' formats '(%s)[%b] '
 zstyle ':vcs_info:*' actionformats '(%s)[%b|%a] '
 zstyle ':vcs_info:svn:*' branchformat '%b:r%r'
-precmd () {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 
-    [[ -t 1 ]] || return
-	[ $EMACS ] && return
-    case $TERM in
-      *xterm*|rxvt|(dt|k|E)term)
-      print -Pn "\e]2;localhost\a"
-      ;;
-    esac
-}
+
 if is-at-least 4.3.10; then
   zstyle ':vcs_info:git:*' check-for-changes true
   zstyle ':vcs_info:git:*' stagedstr "+"
@@ -48,17 +25,11 @@ if is-at-least 4.3.10; then
   zstyle ':vcs_info:git:*' formats '(%s)[%b]%c%u'
   zstyle ':vcs_info:git:*' actionformats '(%s)[%b|%a]%c%u'
 fi
-function _update_vcs_info_msg() {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-}
+
+
 add-zsh-hook precmd _update_vcs_info_msg
 zstyle ':vcs_info:bzr:*' use-simple true
 
-function toon {
-  echo -n ""
-}
 
 ### プロンプト設定
 if [ $EMACS ]; then
@@ -166,48 +137,13 @@ bindkey '^[d' zaw-cdr
 bindkey '^[g' zaw-git-branches
 bindkey '^[@' zaw-gitdir
 
-function zaw-src-gitdir () {
-	_dir=$(git rev-parse --show-cdup 2>/dev/null)
-	if [ $? -eq 0 ]
-	then
-		candidates=( $(git ls-files ${_dir} | perl -MFile::Basename -nle \
-												   '$a{dirname $_}++; END{delete $a{"."}; print for sort keys %a}') )
-	fi
 
-	actions=("zaw-src-gitdir-cd")
-	act_descriptions=("change directory in git repos")
-}
-
-function zaw-src-gitdir-cd () {
-	BUFFER="cd $1"
-	zle accept-line
-}
+zle -N peco-history-selection
+bindkey '^F' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
 
-alias '..'='cd ..'
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-
-alias -g G='| grep'
-alias -g L='| less'
-alias -g H='| head'
-alias -g T='| tail'
-alias -g S='| sed'
-alias -g C='| cat'
-
 alias 'anenavi_env'='eval $(docker-machine env anenavi)' 
-
-# markdownをw3mで見る
-ress() {
-    FILENAME=$1
-    if [ $# -lt 1 ]; then
-        echo "Usage: $0 FILENAME"
-    else
-        github-markup $FILENAME | w3m -T text/html
-    fi
-}
 
 #if (which zprof > /dev/null) ;then
 #  zprof | less
@@ -216,6 +152,3 @@ ress() {
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
 
-eval $(docker-machine env anenavi)
-
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
