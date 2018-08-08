@@ -1,8 +1,9 @@
-source dots/zsh_source/.zsh_env
-source dots/zsh_source/.zsh_zplug
-source dots/zsh_source/.zsh_func
-source dots/zsh_source/.zsh_alias
-source dots/zsh_source/.zsh_prompt
+cd
+source ~/dots/.zsh/zsh_source/.zsh_env
+source ~/dots/.zsh/zsh_source/.zsh_zplug
+source ~/dots/.zsh/zsh_source/.zsh_func
+source ~/dots/.zsh/zsh_source/.zsh_alias
+source ~/dots/.zsh/zsh_source/.zsh_prompt
 
 ### emacs 風キーバインド
 bindkey -e
@@ -128,7 +129,7 @@ bindkey '^[@' zaw-gitdir
 
 
 zle -N peco-history-selection
-bindkey '^F' peco-history-selection
+bindkey '^R' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
 
