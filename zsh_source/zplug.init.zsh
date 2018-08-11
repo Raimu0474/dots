@@ -1,4 +1,14 @@
 ### zplug
+export ZPLUG_HOME="$VENDOR_HOME/.zplug"
+
+if [ ! -e "$ZPLUG_HOME/init.zsh" ]; then
+  echo '=============================='
+  echo 'zplug not exists...'
+  echo 'downloading zplug'
+  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+  echo 'complete!!!'
+  echo '=============================='
+fi
 source "$ZPLUG_HOME/init.zsh"
 
 zplug 'zsh-users/zsh-completions'

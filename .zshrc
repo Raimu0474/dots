@@ -1,8 +1,9 @@
-source dots/zsh_source/.zsh_env
-source dots/zsh_source/.zsh_zplug
-source dots/zsh_source/.zsh_func
-source dots/zsh_source/.zsh_alias
-source dots/zsh_source/.zsh_prompt
+source dots/zsh_source/env.zsh
+source dots/zsh_source/zplug.init.zsh
+source dots/zsh_source/anyenv.init.zsh
+source dots/zsh_source/functions.zsh
+source dots/zsh_source/alias.zsh
+source dots/zsh_source/prompt.zsh
 
 ### emacs 風キーバインド
 bindkey -e
@@ -131,7 +132,3 @@ zle -N peco-history-selection
 bindkey '^F' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
-
-# rbenv用のパスを設定
-eval "$(rbenv init -)"
-
