@@ -1,4 +1,5 @@
 source dots/zsh_source/env.zsh
+source dots/zsh_source/bin.init.zsh
 source dots/zsh_source/zplug.init.zsh
 source dots/zsh_source/anyenv.init.zsh
 source dots/zsh_source/functions.zsh

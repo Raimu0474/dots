@@ -1,5 +1,7 @@
-export PATH="$VENDOR_HOME/.anyenv/bin:$PATH"
-if type anyenv >/dev/null 2>&1; then
+export ANYENV_ROOT="$VENDOR_HOME/.anyenv"
+export PATH="$ANYENV_ROOT/bin:$PATH"
+# initialize anyenv
+if ! type anyenv >/dev/null 2>&1; then
   echo '=============================='
   echo 'anyenv not exists'
   echo 'download and install anyenv...'
@@ -7,3 +9,6 @@ if type anyenv >/dev/null 2>&1; then
   echo 'complete!!!'
   echo '=============================='
 fi
+eval "$(anyenv init -)"
+
+source "$ZSH_HOME/anyenv/install_envs.zsh"
