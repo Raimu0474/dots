@@ -12,8 +12,8 @@ alias -g T='| tail'
 alias -g S='| sed'
 alias -g C='| cat'
 
-for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
-  for file in $(find $dir -type f -mindepth 1);do
+for dir in $(find $PROJECT_ENV -mindepth 1 -type d);do
+  for file in $(find $dir -mindepth 1 -type f);do
     source $file
   done 
 done
