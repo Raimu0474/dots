@@ -1,3 +1,5 @@
+current_path=`pwd`
+cd
 source dots/zsh_source/env.zsh
 source dots/zsh_source/bin.init.zsh
 source dots/zsh_source/zplug.init.zsh
@@ -133,3 +135,5 @@ zle -N peco-history-selection
 bindkey '^F' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
+
+cd $current_path

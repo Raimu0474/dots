@@ -17,3 +17,6 @@ for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
     source $file
   done 
 done
+
+alias docom='docker-compose'
+alias dcrun='docom run --rm'
