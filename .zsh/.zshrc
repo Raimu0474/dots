@@ -132,6 +132,13 @@ bindkey '^R' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
 
+# プロジェクト固有の設定があれば読み込み
+for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
+  for file in $(find $dir -type f -mindepth 1);do
+    source $file
+  done 
+done
+
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
 
