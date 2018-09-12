@@ -20,3 +20,8 @@ done
 
 alias docom='docker-compose'
 alias dcrun='docom run --rm'
+
+alias vi='nvim'
+alias vim='nvim'
+alias vi_n='vi'
+alias vim_n='vim'
