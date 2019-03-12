@@ -1,10 +1,17 @@
+let s:nvim_path = expand('~/.config/nvim')
 "dein Scripts-----------------------------
 if &compatible
-  set nocompatible               " Be iMproved
+  set nocompatible
 endif
 
-" Required:
-set runtimepath+=/Users/zenet/.cache/dein/repos/github.com/Shougo/dein.vim
+let s:dein_dir = expand('~/.cache/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+endif
 
 " Required:
 if dein#load_state('/Users/zenet/.cache/dein')
@@ -21,8 +28,8 @@ if dein#load_state('/Users/zenet/.cache/dein')
   " You can specify revision/branch/tag.
   call dein#add('Shougo/deol.nvim', { 'rev': '01203d4c9' })
 
-  call dein#load_toml('~/.cache/dein/dein.toml', {'lazy': 0})
-  call dein#load_toml('~/.cache/dein/dein_lazy.toml', {'lazy': 1})
+  call dein#load_toml(s:nvim_path . '/dein.toml', {'lazy': 0})
+  call dein#load_toml(s:nvim_path . '/dein_lazy.toml', {'lazy': 1})
 
   " Required:
   call dein#end()
@@ -50,3 +57,7 @@ set tabstop=4
 set noexpandtab
 set shiftwidth=4
 set softtabstop=0
+
+
+"keymap
+nnoremap <silent><C-e> :NERDTreeToggle<CR>
