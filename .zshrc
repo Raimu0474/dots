@@ -1,12 +1,18 @@
 current_path=`pwd`
 cd
-source dots/zsh_source/env.zsh
+
+### env
+export DOTS_HOME="$HOME/dots"
+export VENDOR_HOME="$DOTS_HOME/vendor"
+export ZPLUG_HOME="$VENDOR_HOME/.zplug"
+export PROJECT_ENV="$DOTS_HOME/projects"
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+
 source dots/zsh_source/bin.init.zsh
 source dots/zsh_source/zplug.init.zsh
 source dots/zsh_source/anyenv.init.zsh
 source dots/zsh_source/functions.zsh
 source dots/zsh_source/alias.zsh
-source dots/zsh_source/prompt.zsh
 
 ### emacs 風キーバインド
 bindkey -e

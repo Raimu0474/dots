@@ -1,8 +1,131 @@
-source ~/dots/.zsh/zsh_source/env.zsh
-source ~/dots/.zsh/zsh_source/plugin.zsh
-source ~/dots/.zsh/zsh_source/func.zsh
-source ~/dots/.zsh/zsh_source/alias.zsh
-source ~/dots/.zsh/zsh_source/prompt.zsh
+###########
+### env ###
+###########
+ZPLUG_HOME="$HOME/dots/vendor/.zplug"
+PROJECT_ENV="$HOME/dots/projects"
+
+#############
+### zplug ###
+#############
+source "$ZPLUG_HOME/init.zsh"
+
+zplug 'zsh-users/zsh-completions'
+zplug 'zsh-users/zaw'
+zplug 'zsh-users/zsh-syntax-highlighting', defer:2
+zplug check || zplug install
+
+#################################################################
+### cdr の設定 (zplug load 前に書かないと zaw-cdr がスキップされる) ###
+#################################################################
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook is-at-least
+if is-at-least 4.3.10; then
+  add-zsh-hook chpwd chpwd_recent_dirs
+  zstyle ':chpwd:*' recent-dirs-max 5000
+  zstyle ':chpwd:*' recent-dirs-default yes
+fi
+
+zplug load
+
+
+#################
+### functions ###
+#################
+function precmd () {
+    psvar=()
+    LANG=en_US.UTF-8 vcs_info
+    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+
+    [[ -t 1 ]] || return
+	[ $EMACS ] && return
+    case $TERM in
+      *xterm*|rxvt|(dt|k|E)term)
+      print -Pn "\e]2;localhost\a"
+      ;;
+    esac
+}
+
+function toon {
+  echo -n ""
+}
+
+function _update_vcs_info_msg() {
+    psvar=()
+    LANG=en_US.UTF-8 vcs_info
+    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+}
+
+function zaw-src-gitdir () {
+	_dir=$(git rev-parse --show-cdup 2>/dev/null)
+	if [ $? -eq 0 ]
+	then
+		candidates=( $(git ls-files ${_dir} | perl -MFile::Basename -nle \
+												   '$a{dirname $_}++; END{delete $a{"."}; print for sort keys %a}') )
+	fi
+
+	actions=("zaw-src-gitdir-cd")
+	act_descriptions=("change directory in git repos")
+}
+
+function zaw-src-gitdir-cd () {
+	BUFFER="cd $1"
+	zle accept-line
+}
+
+
+function peco-history-selection() {
+    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+    CURSOR=$#BUFFER
+    zle reset-prompt
+}
+
+#############
+### alias ###
+#############
+alias '..'='cd ..'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+
+alias -g G='| grep'
+alias -g L='| less'
+alias -g H='| head'
+alias -g T='| tail'
+alias -g S='| sed'
+alias -g C='| cat'
+alias -g P='| peco'
+
+alias 'be'='bundle exec'
+alias g='git'
+
+alias docom='docker-compose'
+alias dcrun='docom run --rm'
+
+alias vi='nvim'
+alias vim='nvim'
+alias vi_n='vi'
+alias vim_n='vim'
+
+alias ssh='~/dots/bin/ssh_change_iterm_profile.sh'
+
+alias rip='kill -9'
+
+##############
+### prompt ###
+##############
+
+if [ $EMACS ]; then
+	export TERM=xterm-256color
+	PROMPT="%F{green}%~%f %{$fg[red]%}>%{$reset_color%} "
+else
+	PROMPT="%F{green}%~%f %{$fg[white]%}$(toon)%{$reset_color%} "
+fi
+PROMPT2="%_%% "
+SPROMPT="%r is correct? [n,y,a,e]: "
+RPROMPT="%1(v|%F{yellow}%1v%f|)%F{red}%T%f"
+
+################
+### settings ###
+################
 
 ### emacs 風キーバインド
 bindkey -e
@@ -42,7 +165,9 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
-### 補完
+###########
+### 補完 ###
+###########
 autoload -U compinit; compinit -C
 
 ### 補完方法毎にグループ化する。
@@ -61,16 +186,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 zstyle ':completion:*' keep-prefix
 zstyle ':completion:*' recent-dirs-insert both
-
-### 補完候補
-### _oldlist 前回の補完結果を再利用する。
-### _complete: 補完する。
-### _match: globを展開しないで候補の一覧から補完する。
-### _history: ヒストリのコマンドも補完候補とする。
-### _ignored: 補完候補にださないと指定したものも補完候補とする。
-### _approximate: 似ている補完候補も補完候補とする。
-### _prefix: カーソル以降を無視してカーソル位置までで補完する。
-#zstyle ':completion:*' completer _oldlist _complete _match _history _ignored _approximate _prefix
 zstyle ':completion:*' completer _complete _ignored
 
 ## 補完候補をキャッシュする。
@@ -132,7 +247,9 @@ bindkey '^R' peco-history-selection
 
 zaw-register-src -n gitdir zaw-src-gitdir
 
-# プロジェクト固有の設定があれば読み込み
+########################################
+### プロジェクト固有の設定があれば読み込み ###
+########################################
 for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
   for file in $(find $dir -type f -mindepth 1);do
     source $file
@@ -140,6 +257,7 @@ for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
 done
 
 export RUBOCOP_OPTS='-D -E -S'
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
