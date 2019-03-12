@@ -25,3 +25,7 @@ alias vi='nvim'
 alias vim='nvim'
 alias vi_n='vi'
 alias vim_n='vim'
+
+alias ssh='~/dots/bin/ssh_change_iterm_profile.sh'
+
+alias rip='kill -9'

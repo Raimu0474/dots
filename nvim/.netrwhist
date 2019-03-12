@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/zenet'
+let g:netrw_dirhist_2='/Users/zenet/.cache'
+let g:netrw_dirhist_3='/Users/zenet/.cache/dein'
+let g:netrw_dirhist_4='/Users/zenet/.cache/dein/dein.vim'

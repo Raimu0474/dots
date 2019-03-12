@@ -1,4 +1,3 @@
-
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible               " Be iMproved
@@ -21,6 +20,9 @@ if dein#load_state('/Users/zenet/.cache/dein')
 
   " You can specify revision/branch/tag.
   call dein#add('Shougo/deol.nvim', { 'rev': '01203d4c9' })
+
+  call dein#load_toml('~/.cache/dein/dein.toml', {'lazy': 0})
+  call dein#load_toml('~/.cache/dein/dein_lazy.toml', {'lazy': 1})
 
   " Required:
   call dein#end()

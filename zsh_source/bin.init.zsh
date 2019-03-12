@@ -5,3 +5,4 @@ for shell in `ls "$DOTS_HOME/zsh_source/bin"`; do
   fi
 done
 export PATH="$DOTS_HOME/zsh_source/bin:$PATH"
+export PATH="$HOME/zsh_source/bin:$PATH"

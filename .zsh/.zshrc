@@ -139,6 +139,8 @@ for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
   done 
 done
 
+export RUBOCOP_OPTS='-D -E -S'
+
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
 
