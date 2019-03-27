@@ -5,6 +5,9 @@ repo = 'Shougo/dein.vim'
 repo = 'Shougo/neosnippet.vim'
 
 [[plugins]]
+repo = 'Shougo/deol.nvim'
+
+[[plugins]]
 repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
