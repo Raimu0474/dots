@@ -1,12 +1,48 @@
+
+
 ###########
 ### env ###
 ###########
-ZPLUG_HOME="$HOME/dots/vendor/.zplug"
 PROJECT_ENV="$HOME/dots/projects"
+
+################
+#### install ###
+################
+
+
+##############
+### anyenv ###
+##############
+ANYENV_PATH="$HOME/dots/vendor/.anyenv"
+if [ ! -e $ANYENV_PATH ];then
+  git clone https://github.com/anyenv/anyenv $ANYENV_PATH
+fi
+
+export ANYENV_DEFINITION_ROOT="$ANYENV_PATH/anyenv-install"
+
+export PATH="$ANYENV_PATH/bin:$PATH"
+
+# if [ ! -e $ANYENV_PATH/anyenv_install ];then
+#   anyenv install --init
+# fi
+
+if [ ! -e $HOME/.anyenv/envs/rbenv ];then
+  anyenv install rbenv
+fi
+
+if [ ! -e $HOME/.anyenv/envs/pyenv ];then
+  anyenv install pyenv
+fi
+eval "$(anyenv init -)"
 
 #############
 ### zplug ###
 #############
+
+ZPLUG_HOME="$HOME/dots/vendor/.zplug"
+if [ ! -e $ZPLUG_HOME ]; then
+  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+fi
 source "$ZPLUG_HOME/init.zsh"
 
 zplug 'zsh-users/zsh-completions'
@@ -31,11 +67,11 @@ zplug load
 ### functions ###
 #################
 function precmd () {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+  psvar=()
+  LANG=en_US.UTF-8 vcs_info
+  [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 
-    [[ -t 1 ]] || return
+  [[ -t 1 ]] || return
 	[ $EMACS ] && return
     case $TERM in
       *xterm*|rxvt|(dt|k|E)term)
@@ -49,9 +85,9 @@ function toon {
 }
 
 function _update_vcs_info_msg() {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+  psvar=()
+  LANG=en_US.UTF-8 vcs_info
+  [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 }
 
 function zaw-src-gitdir () {
@@ -73,9 +109,20 @@ function zaw-src-gitdir-cd () {
 
 
 function peco-history-selection() {
-    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
-    CURSOR=$#BUFFER
-    zle reset-prompt
+  BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+  CURSOR=$#BUFFER
+  zle reset-prompt
+}
+
+function ruby-trunk-build() {
+  BEFORE_PATH=`pwd`
+  cd $HOME/src/ruby
+  git pull
+  autoconf
+  ./configure --prefix=$HOME/.anyenv/envs/rbenv/versions/`date "+%Y%m%d_%H%M%S"` --with-opt-dir=`brew --prefix openssl1`
+  make -j4
+  sudo make install
+  cd $BEFORE_PATH
 }
 
 #############
@@ -257,8 +304,9 @@ for dir in $(find $PROJECT_ENV -type d -mindepth 1);do
 done
 
 export RUBOCOP_OPTS='-D -E -S'
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+# export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
 # rbenv用のパスを設定
 eval "$(rbenv init -)"
 
+export PATH="$HOME/.cargo/bin:$PATH"

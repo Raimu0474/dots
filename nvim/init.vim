@@ -14,12 +14,12 @@ if &runtimepath !~# '/dein.vim'
 endif
 
 " Required:
-if dein#load_state('/Users/zenet/.cache/dein')
-  call dein#begin('/Users/zenet/.cache/dein')
+if dein#load_state('$HOME/.cache/dein')
+  call dein#begin('$HOME/.cache/dein')
 
   " Let dein manage dein
   " Required:
-  call dein#add('/Users/zenet/.cache/dein/repos/github.com/Shougo/dein.vim')
+  call dein#add('$HOME/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
   call dein#add('Shougo/neosnippet.vim')
